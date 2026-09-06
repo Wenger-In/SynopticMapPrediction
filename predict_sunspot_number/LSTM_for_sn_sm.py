@@ -12,16 +12,15 @@ import csv
 import random
 import time
 
+from smp.config import load_config
+from smp.utils import set_random_seed
+
 save_or_not = 0
 
 # 固定随机种子
-seed = 456
-torch.manual_seed(seed)
-torch.cuda.manual_seed(seed)
-np.random.seed(seed)
-random.seed(seed)
-torch.backends.cudnn.deterministic = True
-torch.backends.cudnn.benchmark = False
+config = load_config()
+seed = config.random_seed
+set_random_seed(seed)
 
 def moving_average(data, window_size):
     window = np.ones(window_size) / window_size
@@ -30,8 +29,7 @@ def moving_average(data, window_size):
 
 
 # 数据导入和预处理
-# file_dir = 'E:/Research/Data/WSO/gather_harmonic_coefficient.mat'
-file_dir = 'E:/Research/Data/Sunspot/sn_sm.mat'
+file_dir = config.path("sunspot_smoothed")
 data_str = scio.loadmat(file_dir)
 # data_mat = data_str['save_var'] # size: 619,100
 data_mat = data_str['sn']
@@ -250,20 +248,19 @@ plt.legend()
 plt.yscale('log')
 
 if save_or_not == 1:
-    save_dir = 'E:/Research/Work/magnetic_multipole/sunspot/smooth_prediction/0/'
+    save_dir = config.ensure_output("sunspot_output") / "smooth_prediction" / "0"
+    save_dir.mkdir(parents=True, exist_ok=True)
     save_file = 'train_predict.csv'
-    np.savetxt(save_dir+save_file, train_predict[:train_size],delimiter=',')
+    np.savetxt(save_dir / save_file, train_predict[:train_size], delimiter=',')
     save_file = 'val_predict.csv'
-    np.savetxt(save_dir+save_file, val_predict,delimiter=',')
+    np.savetxt(save_dir / save_file, val_predict, delimiter=',')
     save_file = 'test_predict.csv'
-    np.savetxt(save_dir+save_file, test_predict,delimiter=',')
+    np.savetxt(save_dir / save_file, test_predict, delimiter=',')
     save_file = 'future_predict.csv'
-    np.savetxt(save_dir+save_file, future_predict,delimiter=',')
+    np.savetxt(save_dir / save_file, future_predict, delimiter=',')
     save_file = 'future_predict_ulim.csv'
-    np.savetxt(save_dir+save_file, future_predict_ulim,delimiter=',')
+    np.savetxt(save_dir / save_file, future_predict_ulim, delimiter=',')
     save_file = 'future_predict_llim.csv'
-    np.savetxt(save_dir+save_file, future_predict_llim,delimiter=',')
+    np.savetxt(save_dir / save_file, future_predict_llim, delimiter=',')
 
 plt.show()
-
-db = 1

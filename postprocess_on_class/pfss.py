@@ -15,6 +15,9 @@ from pfsspy import tracing
 import pandas as pd
 from scipy.io import savemat
 
+from smp.config import load_config
+from smp.constants import DEFAULT_PFSS_RADIAL_POINTS, DEFAULT_SOURCE_SURFACE_RADIUS
+
 ###############################################################################
 # Fuctions
 def set_axes_lims(ax):
@@ -23,9 +26,8 @@ def set_axes_lims(ax):
     return 0
 ###############################################################################
 # Step 1: import magnetogram
-# gong_fname = 'E:/Research/Program/SynopticMapPrediction/postprocess_on_class/neaten/cr2259_neaten.fits'
-gong_fname = 'E:/Research/Data/GONG/mrzqs/fits/mrzqs_c2135.fits'
-# gong_fname = 'E:/Research/Program/SynopticMapPrediction/determine_order/2239_WSO_9.fits'
+config = load_config()
+gong_fname = config.path("gong_mrzqs_fits") / "mrzqs_c2135.fits"
 
 gong_map = sunpy.map.Map(gong_fname)
 # Remove the mean, sothat curl B = 0; set colorbar to be symlog
@@ -41,13 +43,13 @@ for i in range(len(gong_map.data)):
             gong_map.data[i][j] = -lim
 ###############################################################################
 # Step 2: set grids and calculate
-nrho = 30
-rss = 2.5  # unit: solar radii
-input = pfsspy.Input(gong_map, nrho, rss)
-output = pfsspy.pfss(input)
+nrho = DEFAULT_PFSS_RADIAL_POINTS
+rss = DEFAULT_SOURCE_SURFACE_RADIUS  # unit: solar radii
+pfss_input = pfsspy.Input(gong_map, nrho, rss)
+output = pfsspy.pfss(pfss_input)
 ###############################################################################
 # Step 3: plot input GONG magnetogram (Figure 1)
-m = input.map
+m = pfss_input.map
 # Create the figure and axes
 fig = plt.figure()
 ax = plt.subplot(projection=m)
@@ -62,7 +64,6 @@ set_axes_lims(ax)
 # Step 4: plot output source surface map (Figure 2)
 ss_br = output.source_surface_br
 # Save data
-# savemat('E:/Research/Program/SynopticMapPrediction/determine_order/2239_WSO_9_pfss.mat', {'data': ss_br.data})
 # Create the figure and axes
 fig = plt.figure()
 ax = plt.subplot(projection=ss_br, label='Neutral Line')
@@ -72,7 +73,6 @@ plt.colorbar(orientation='horizontal')
 # Plot the polarity inversion line
 ax.plot_coord(output.source_surface_pils[0])
 # # Plot Earth trace
-# file_path = 'E:/Research/Program/SynopticMapPrediction/postprocess_on_class/earth_location/OMNI_data_2022_to_ss.xlsx'
 # df = pd.read_excel(file_path)
 
 # doy_beg = 34
@@ -114,7 +114,7 @@ for field_line in field_lines:
 
 # Add inner and outer boundary circles
 ax.add_patch(mpatch.Circle((0, 0), 1, color='gray', fill=True))
-ax.add_patch(mpatch.Circle((0, 0), input.grid.rss, color='k', linestyle='--',
+ax.add_patch(mpatch.Circle((0, 0), pfss_input.grid.rss, color='k', linestyle='--',
                            fill=False))
 ax.set_title('PFSS solution')
 ###############################################################################
@@ -143,5 +143,3 @@ for field_line in field_lines:
 
 ax.set_title('PFSS solution')
 plt.show()
-
-db

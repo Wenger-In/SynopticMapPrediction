@@ -9,19 +9,18 @@ from scipy.interpolate import interp1d
 import csv
 from torch.optim.lr_scheduler import StepLR
 import random
+
+from smp.config import load_config
+from smp.utils import set_random_seed
+
 # 固定随机种子
-seed = 456
-torch.manual_seed(seed)
-torch.cuda.manual_seed(seed)
-np.random.seed(seed)
-random.seed(seed)
-torch.backends.cudnn.deterministic = True
-torch.backends.cudnn.benchmark = False
+config = load_config()
+seed = config.random_seed
+set_random_seed(seed)
 
 # test
-# data_csv = pd.read_csv('E:/Research/Program/LSTM/test/data.csv',usecols=[1])
 #LSTM（Long Short-Term Memory）是长短期记忆网络
-file_dir = 'E:/Research/Data/WSO/gather_harmonic_coefficient.mat'
+file_dir = config.path("harmonic_coefficients")
 data_str = scio.loadmat(file_dir)
 data_mat = data_str['save_var'] # size: 619,100
 data = np.zeros((617,1))

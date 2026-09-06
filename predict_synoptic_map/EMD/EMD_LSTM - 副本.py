@@ -12,19 +12,17 @@ import csv
 import random
 import time
 
+from smp.config import load_config
+from smp.utils import set_random_seed
+
 save_or_not = 0
 # 固定随机种子
-seed = 456
-torch.manual_seed(seed)
-torch.cuda.manual_seed(seed)
-np.random.seed(seed)
-random.seed(seed)
-torch.backends.cudnn.deterministic = True
-torch.backends.cudnn.benchmark = False
+config = load_config()
+seed = config.random_seed
+set_random_seed(seed)
 
 # 导入数据
-file_dir = 'E:/Research/Data/WSO/gather_harmonic_coefficient.mat'
-# file_dir = 'E:/Research/Data/Sunspot/sn_interp.mat'
+file_dir = config.path("harmonic_coefficients")
 data_str = scio.loadmat(file_dir)
 data_mat = data_str['save_var'] # size: 619,100
 data_lm = np.zeros((617,1))
@@ -292,8 +290,6 @@ plt.show()
 
 # 保存预测序列
 if save_or_not == 1:
-    save_dir = 'E:/Research/Work/magnetic_multipole/EMD+LSTM/predict/'
+    save_dir = config.ensure_output("model_output")
     save_file = 'g_' + str(int(l_cor)) + '_' + str(int(m_cor)) + '.csv'
-    np.savetxt(save_dir+save_file, data_predict[-future_step:],delimiter=',')
-
-db = 1
+    np.savetxt(save_dir / save_file, data_predict[-future_step:], delimiter=',')

@@ -11,6 +11,9 @@ import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 import scipy.io as scio
 
+from smp.config import load_config
+from smp.utils import set_random_seed
+
 class Model(torch.nn.Module):
     def __init__(self) -> None:
         super().__init__()
@@ -162,7 +165,9 @@ if __name__ == '__main__':
     print('Training...')
     
     # 数据导入和预处理
-    file_dir = 'E:/Research/Data/Sunspot/sn.mat'
+    config = load_config()
+    set_random_seed(config.random_seed)
+    file_dir = config.path("sunspot")
     data_str = scio.loadmat(file_dir)
     data_mat = data_str['sn']
     data = np.zeros((3000,1))

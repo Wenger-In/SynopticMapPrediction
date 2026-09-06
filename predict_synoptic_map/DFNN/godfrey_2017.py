@@ -8,6 +8,9 @@ import svgwrite
 import webbrowser
 import os
 
+from smp.config import load_config
+from smp.utils import set_random_seed
+
 class Model(torch.nn.Module):
     def __init__(self) -> None:
         super().__init__()
@@ -156,6 +159,7 @@ class Plotter():
 
 
 if __name__ == '__main__':
+    set_random_seed(load_config().random_seed)
     print('Training...')
     train_x = torch.arange(100, dtype=torch.float).reshape((-1, 1))
     train_y = (5 * torch.sin(train_x / 5) + train_x / 5).reshape((-1, 1))

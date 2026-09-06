@@ -1,4 +1,5 @@
 clear; close all;
+cfg = project_config();
 save_or_not = 0;
 %% CR series
 % cr_beg_GNG = 2047; cr_end_GNG = 2266; % for GONG data
@@ -12,8 +13,7 @@ hc_mat = zeros(cr_num,hc_num);
 l_lst = zeros(1,hc_num);
 m_lst = zeros(1,hc_num);
 %% import data
-% store_dir = ('E:\Research\Data\GONG\harmonics\');
-store_dir = ('E:\Research\Data\WSO\harmonics\');
+store_dir = [cfg.paths.wso_harmonics, filesep];
 for i = cr_beg_WSO : cr_end_WSO
 %     file_name = ['mrmqc_c',num2str(i_cr),'.dat'];
     file_name = ['cr',num2str(i),'.dat'];
@@ -46,7 +46,7 @@ for i = cr_beg_WSO : cr_end_WSO
     end
 end
 %% save data
-save_dir = 'E:\Research\Data\WSO\';
+save_dir = [cfg.paths.wso_root, filesep];
 save_var = [l_lst;m_lst;hc_mat];
 if save_or_not == 1
     save_file = [save_dir,'harmonic_coefficient_gathered.dat'];

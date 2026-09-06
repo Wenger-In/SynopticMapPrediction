@@ -1,9 +1,10 @@
 clear; close all;
+cfg = project_config();
 %% import data
-pred_dir = 'E:\Research\Work\magnetic_multipole\sunspot\smooth_prediction\0\';
+pred_dir = [fullfile(cfg.paths.sunspot_output, 'smooth_prediction', '0'), filesep];
 future = importdata([pred_dir,'future_predict.csv']);
 
-hist_dir = 'E:\Research\Data\Sunspot\';
+hist_dir = [cfg.paths.sunspot_root, filesep];
 ind_ms_end = 3303;
 ind_m_end = 3309;
 sn_ms_info = importdata([hist_dir,'SN_ms_tot_V2.0_202410.csv']);

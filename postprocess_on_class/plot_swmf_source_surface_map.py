@@ -7,18 +7,22 @@ import pfsspy
 from pfsspy import coords
 from scipy.interpolate import interp2d
 
+from smp.config import load_config
+from smp.constants import DEFAULT_PFSS_RADIAL_POINTS, DEFAULT_SOURCE_SURFACE_RADIUS
+
 # data directory
-obsv_dir = 'E:/Research/Data/GONG/fits/'
-pred_dir = 'E:/Research/Program/SynopticMapPrediction/postprocess_on_class/neaten/'
-swmf_dir = 'E:/Research/Program/SynopticMapPrediction/postprocess_on_class/shl_excel/'
-save_dir = 'E:/Research/Program/SynopticMapPrediction/postprocess_on_class/comparison/'
+config = load_config()
+obsv_dir = config.path("gong_fits")
+pred_dir = config.repository_root / "postprocess_on_class" / "neaten"
+swmf_dir = config.repository_root / "postprocess_on_class" / "shl_excel"
+save_dir = config.repository_root / "postprocess_on_class" / "comparison"
 
 # PFSS function
 def PFSS_source_surface(gong_file):
     gong_map = sunpy.map.Map(gong_file)
     norm = SymLogNorm(linthresh=5)
     gong_map = sunpy.map.Map(gong_map.data - np.mean(gong_map.data), gong_map.meta, plot_settings={'norm': norm})
-    nrho, rss = 30, 2.5
+    nrho, rss = DEFAULT_PFSS_RADIAL_POINTS, DEFAULT_SOURCE_SURFACE_RADIUS
     input_map = pfsspy.Input(gong_map, nrho, rss)
     output_map = pfsspy.pfss(input_map)
     ss_map = output_map.source_surface_br
@@ -34,17 +38,17 @@ cr_avail_lst = np.concatenate((cr_lst1, cr_lst2, cr_lst3, cr_lst4))
 
 for cr in cr_avail_lst: # 2253,2278
     # PFSS result of observation
-    obsv_path = obsv_dir + 'mrzqs_c' + str(cr) +'.fits'
+    obsv_path = obsv_dir / f"mrzqs_c{cr}.fits"
     obsv_pfss = PFSS_source_surface(obsv_path)
     obsv_pfss_map = obsv_pfss.data
 
     # # PFSS result of prediction
-    pred_path = pred_dir + 'cr' + str(cr) +'_neaten.fits'
+    pred_path = pred_dir / f"cr{cr}_neaten.fits"
     pred_pfss = PFSS_source_surface(pred_path)
     pred_pfss_map = pred_pfss.data
 
     # SWMF result of prediction
-    swmf_path = swmf_dir + 'Br_' + str(cr) +'.xlsx'
+    swmf_path = swmf_dir / f"Br_{cr}.xlsx"
     pred_swmf = pd.read_excel(swmf_path)
     pred_swmf_map = np.array(pred_swmf)
 
@@ -109,6 +113,6 @@ for cr in cr_avail_lst: # 2253,2278
         ax.axhline(y=0, color='black', linewidth=0.8)
     plt.suptitle('CR ' + str(cr), fontsize=16)
     # save figure
-    plt.savefig(save_dir + 'CR' + str(cr) +'.png', bbox_inches='tight')
+    plt.savefig(save_dir / f"CR{cr}.png", bbox_inches='tight')
     # plt.show()
     plt.close()

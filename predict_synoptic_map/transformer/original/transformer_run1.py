@@ -5,10 +5,15 @@ from torch.utils.data import DataLoader, TensorDataset
 from sklearn.utils import shuffle
 from tqdm import tqdm
 
+from smp.config import load_config
+from smp.utils import set_random_seed
+
 #print(torch.__version__)
 
-train_df = pd.read_csv(r'C:\Users\HUAWEI\Desktop\fill the gap\2002_2004_5min_data.csv', encoding='utf8', header=None)    #读取数据集
-valid_df = pd.read_csv(r'C:\Users\HUAWEI\Desktop\fill the gap\2005_data_5min_4day.csv', encoding='utf8', header=None)    #读取数据集
+config = load_config()
+set_random_seed(config.random_seed)
+train_df = pd.read_csv(config.path("transformer_train"), encoding='utf8', header=None)
+valid_df = pd.read_csv(config.path("transformer_validation"), encoding='utf8', header=None)
 #print(train_df.head(5))
 train_df = train_df[[28, 29, 30]].copy()
 valid_df = valid_df[[28, 29, 30]].copy()

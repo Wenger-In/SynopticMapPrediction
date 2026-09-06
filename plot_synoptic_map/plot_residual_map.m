@@ -1,5 +1,6 @@
 clear; close all;
-path = 'E:\Research\Work\magnetic_multipole\predict_SC25\comparison\';
+cfg = project_config();
+path = [fullfile(cfg.output_root, 'predict_SC25', 'comparison'), filesep];
 cr = 2259;
 %% colorbar red-white-blue
 color_red   = [1,0,0];

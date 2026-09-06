@@ -1,5 +1,6 @@
 clear; close all;
-path = 'E:\Research\Program\SynopticMapPrediction\determine_order\';
+cfg = project_config();
+path = [fullfile(cfg.repo_root, 'determine_order'), filesep];
 gong_file = '2239_gong_pfss.mat';
 WSO_5_file = '2239_WSO_5_pfss.mat';
 WSO_9_file = '2239_WSO_9_pfss.mat';

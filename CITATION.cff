@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the associated article."
+title: "Synoptic Map Prediction by LSTM and EMD"
+type: software
+authors:
+  - family-names: Zhuo
+    given-names: Rui
+version: 1.0.0
+date-released: 2026-09-06
+repository-code: "https://github.com/Rui-Zhuo/Synoptic_map_prediction_by_LSTM_EMD"
+preferred-citation:
+  type: article
+  authors:
+    - family-names: Zhuo
+      given-names: Rui
+    - family-names: He
+      given-names: Jiansen
+    - family-names: Duan
+      given-names: Die
+    - family-names: Lin
+      given-names: Rong
+    - family-names: Wu
+      given-names: Ziqi
+    - family-names: Yan
+      given-names: Limei
+    - family-names: Wei
+      given-names: Yong
+  title: "Prediction of solar activities: Sunspot numbers and solar magnetic synoptic maps"
+  journal: "Science China Earth Sciences"
+  year: 2024
+  volume: 67
+  start: 2460
+  end: 2477
+  doi: "10.1007/s11430-023-1354-4"
+  url: "https://link.springer.com/article/10.1007/s11430-023-1354-4"

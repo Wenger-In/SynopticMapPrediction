@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "synoptic-map-prediction"
+version = "1.0.0"
+description = "Solar-cycle and magnetic synoptic-map prediction with LSTM and EMD"
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+authors = [{ name = "Rui Zhuo" }]
+dependencies = [
+  "numpy>=1.26,<2.0",
+  "pandas>=2.2,<3.0",
+  "scipy>=1.11,<1.14",
+  "matplotlib>=3.8,<4.0",
+  "scikit-learn>=1.4,<2.0",
+  "statsmodels>=0.14,<1.0",
+  "PyWavelets>=1.5,<2.0",
+  "EMD-signal>=1.6,<2.0",
+  "torch>=2.2,<3.0",
+  "tensorflow>=2.15,<3.0",
+  "tqdm>=4.66,<5.0",
+]
+
+[project.optional-dependencies]
+solar = [
+  "astropy>=6.0,<8.0",
+  "sunpy[map]>=6.0,<8.0",
+  "pfsspy>=1.2,<2.0",
+  "openpyxl>=3.1,<4.0",
+]
+dev = [
+  "pytest>=8.0,<9.0",
+  "ruff>=0.6,<1.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+exclude = ["FDIP", "FDIP_SWMF", "PSI-master"]

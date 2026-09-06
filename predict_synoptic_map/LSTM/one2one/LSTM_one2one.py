@@ -13,14 +13,13 @@ import csv
 import random
 import time
 
+from smp.config import load_config
+from smp.utils import set_random_seed
+
 # 固定随机种子
-seed = 456
-torch.manual_seed(seed)
-torch.cuda.manual_seed(seed)
-np.random.seed(seed)
-random.seed(seed)
-torch.backends.cudnn.deterministic = True
-torch.backends.cudnn.benchmark = False
+config = load_config()
+seed = config.random_seed
+set_random_seed(seed)
 
 # 定义LSTM模型
 class LSTM(nn.Module):
@@ -39,8 +38,8 @@ class LSTM(nn.Module):
         return x
 
 # 导入数据
-hc_dir = 'E:/Research/Data/WSO/gather_harmonic_coefficient.mat'
-sn_dir = 'E:/Research/Data/Sunspot/sn_interp.mat'
+hc_dir = config.path("harmonic_coefficients")
+sn_dir = config.path("sunspot_interpolated")
 hc_str = scio.loadmat(hc_dir)
 sn_str = scio.loadmat(sn_dir)
 hc_mat = hc_str['save_var'] # size: 619,100

@@ -1,5 +1,6 @@
 clear; close all;
-data_dir = 'E:\Research\Program\SynopticMapPrediction\postprocess_on_class\earth_location\';
+cfg = project_config();
+data_dir = [fullfile(cfg.repo_root, 'postprocess_on_class', 'earth_location'), filesep];
 swmf_path = [data_dir, 'SWMF_1AU_Bn_Br_Bt_2538.xlsx'];
 omni_2022_path = [data_dir, 'OMNI_data_2022_to_ss.xlsx'];
 omni_2023_path = [data_dir, 'OMNI_data_2023_to_ss.xlsx'];

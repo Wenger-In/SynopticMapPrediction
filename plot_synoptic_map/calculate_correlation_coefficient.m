@@ -1,14 +1,15 @@
 clear; close all;
+cfg = project_config();
 cr = 2261;
 pred_or_pers = 0; % 0-predict model; 1-persistent model
 %% import data
-obs_dir = 'E:\Research\Work\magnetic_multipole\harmonics_map\WSO\';
+obs_dir = [fullfile(cfg.output_root, 'harmonics_map', 'WSO'), filesep];
 obs_file = [obs_dir,'cr',num2str(cr),'_obs.mat'];
 obs_data = load(obs_file);
 magneto_obs = obs_data.magneto;
 %% comparison
 if pred_or_pers == 0
-    pred_dir = 'E:\Research\Work\magnetic_multipole\predict_SC25\';
+    pred_dir = [fullfile(cfg.output_root, 'predict_SC25'), filesep];
     pred_file = [pred_dir,'cr',num2str(cr),'_pred.mat'];
     pred_data = load(pred_file);
     magneto_pred = pred_data.magneto;

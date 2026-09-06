@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.venv/
+
+# MATLAB
+*.asv
+*.m~
+
+# Local configuration and generated results
+config/local.json
+data/
+outputs/
+checkpoints/
+*.pth
+*.pth.tar
+
+# IDE and operating-system files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

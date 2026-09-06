@@ -1,14 +1,15 @@
 clear; close all;
+cfg = project_config();
 style = 2;
 %% import data
-omni_file = 'E:\Research\Data\OMNI\omni_27_av.dat';
+omni_file = cfg.paths.omni_27day;
 omni_data = load(omni_file);
 year_omni = omni_data(:,1);
 doy_omni = omni_data(:,2);
 epoch_omni = YearDoy2Epoch(year_omni, doy_omni);
 Pf = omni_data(:,29);
 
-ssn_file = 'E:\Research\Data\Sunspot\SN_ms_tot_V2.0_202406.csv';
+ssn_file = fullfile(cfg.paths.sunspot_root, 'SN_ms_tot_V2.0_202406.csv');
 ssn_data = importdata(ssn_file);
 ssn_data = ssn_data(2727:end-6,:); % recent 4 solar cycles
 deci_year_ssn = ssn_data(:,3);

@@ -1,4 +1,5 @@
 clear; close all;
+cfg = project_config();
 % select order
 l = 1;
 %% Component: colormap stand for Solar Cycle
@@ -31,7 +32,7 @@ colormap_sc = [sc_full_1(:,1:n_1).'; sc_full_2(:,1:n_2).'; sc_full_3(:,1:n_3).';
 
 
 %% PART 0: import data
-store_dir = 'E:\Research\Data\WSO\';
+store_dir = [cfg.paths.wso_root, filesep];
 file_name = 'gather_harmonic_coefficient.dat';
 data_dir = [store_dir,file_name];
 data = load(data_dir);
@@ -126,7 +127,7 @@ end
 %% PART 2: Wavelet transformation: get cwt from Python code (get_harmonic_coefficient_cwt.py)
 cr2year = 365.2422/27.2753; % from Carrington Rotation Period to Year
 % import cwt data
-cwt_dir = 'E:\Research\Work\magnetic_multipole\cwt\cmor1.5-1.0_log\';
+cwt_dir = [fullfile(cfg.paths.cwt_output, 'cmor1.5-1.0_log'), filesep];
 freq_name = 'freq.csv';
 freq = importdata([cwt_dir,freq_name]);
 freq_num = length(freq);
@@ -183,7 +184,7 @@ end
 
 %% PART 3: Compare with sunspot number
 % import sunspot data
-sn_dir = 'E:\Research\Data\Sunspot\sn_ms_interp.dat';
+sn_dir = fullfile(cfg.paths.sunspot_root, 'sn_ms_interp.dat');
 sn_data = load(sn_dir);
 sn_cr_lst = sn_data(:,1);
 sn = sn_data(:,3);

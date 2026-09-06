@@ -6,6 +6,9 @@ import math
 import os
 from scipy.io import loadmat
 
+from smp.config import load_config
+from smp.constants import CARRINGTON_ROTATIONS_PER_YEAR
+
 
 def CWT(data,l,m,fs=1):
     t = np.arange(0, len(data)) / fs
@@ -14,7 +17,7 @@ def CWT(data,l,m,fs=1):
     # wavename = "cmor"  # cmor 小波
     wavename='cmorl1.5-1.0'
     
-    cr2year = 365.2422/27.2753; # from Carrington Rotation Period to Year
+    cr2year = CARRINGTON_ROTATIONS_PER_YEAR
     # totalscale = 256
     # fc = pywt.central_frequency(wavename)  # 中心频率
     # cparam = 2 * fc * totalscale
@@ -29,7 +32,6 @@ def CWT(data,l,m,fs=1):
     [cwtmatr, frequencies] = pywt.cwt(data, scales, wavename, 1.0 / fs)  # 连续小波变换
 
     
-    # save_dir = 'E:/Research/Work/magnetic_multipole/cwt/cmor_log/'
     # np.savetxt(save_dir+'cwt_'+str(l)+'^'+str(m)+'.csv', cwtmatr, delimiter = ',')
     # np.savetxt(save_dir+'freq_'+str(l)+'^'+str(m)+'.csv', frequencies, delimiter = ',')
     
@@ -81,9 +83,8 @@ if __name__ == "__main__":
     # print(pywt.wavelist('morl'))
     
     ##  PART 0: import data
-    store_dir = 'E:/Research/Data/WSO/'
-    file_name = 'gather_harmonic_coefficient.mat'
-    data_dir = store_dir+file_name
+    config = load_config()
+    data_dir = config.path("harmonic_coefficients")
     data0 = loadmat(data_dir, mat_dtype=True)
     data = data0['save_var']
     

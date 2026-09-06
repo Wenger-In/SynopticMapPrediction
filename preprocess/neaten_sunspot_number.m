@@ -1,7 +1,8 @@
 clear; close all;
+cfg = project_config();
 save_or_not = 0;
 %% PART 1: import data
-store_dir = 'E:\Research\Data\Sunspot\';
+store_dir = [cfg.paths.sunspot_root, filesep];
 spot_name = 'SN_ms_tot_V2.0.csv';
 data_full = importdata([store_dir,spot_name]);
 frac_lst = data_full(:,3);
@@ -49,7 +50,7 @@ xlabel('Year');
 ylabel('Sunspot Number');
 set(gca,'LineWidth',LineWidth,'FontSize',FontSize);
 %% save data
-save_dir = 'E:\Research\Data\Sunspot\';
+save_dir = [cfg.paths.sunspot_root, filesep];
 save_var = [CR_lst.',CR_frac_lst,sn_interp];
 if save_or_not == 1
     save_file = [save_dir,'sn_ms_interp.dat'];

@@ -1,13 +1,14 @@
 clear; close all;
+cfg = project_config();
 save_or_not = 1;
 %% import original data
-real_dir = 'E:\Research\Data\WSO\';
+real_dir = [cfg.paths.wso_root, filesep];
 ori_file = [real_dir,'gather_harmonic_coefficient.mat'];
 hc_ori = importdata(ori_file);
 l_lst = hc_ori(1,:);
 m_lst = hc_ori(2,:);
 %% import predicted data
-pred_dir = 'E:\Research\Work\magnetic_multipole\EMD+LSTM\predict\';
+pred_dir = [fullfile(cfg.output_root, 'EMD+LSTM', 'predict'), filesep];
 future_step = 150;
 max_order = 5;
 hc_num = (max_order+1)^2;

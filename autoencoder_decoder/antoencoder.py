@@ -6,6 +6,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 import re
+
+from smp.config import load_config
+from smp.utils import min_max_normalize, set_random_seed
  
 # Encoder
 def get_encoder(in_shape,out_units):
@@ -88,42 +91,40 @@ def get_map_data(folder_path):
     data_train = data_train.reshape((-1, np.prod(data_train.shape[1:])))
     data_test = data_test.reshape((-1, np.prod(data_test.shape[1:])))
     return data_train, cr_train, data_test, cr_test
-def min_max_normalize(data):
-    min_val = data.min()
-    max_val = data.max()
-    normalized_data = (data - min_val) / (max_val - min_val)
-    # abs_max = max(abs(min_val), abs(max_val))
-    # normalized_data = 0.5 + data / (2 * abs_max)
-    return normalized_data
+def main():
+    """Train and inspect an autoencoder for WSO synoptic maps."""
+    config = load_config()
+    set_random_seed(config.random_seed)
+    ae, encoder, decoder = get_autoencoder()
+    x_train, y_train, x_test, _ = get_map_data(config.path("wso_field"))
+    ae.fit(
+        x_train,
+        x_train,
+        epochs=500,
+        batch_size=128,
+        shuffle=True,
+        validation_data=(x_test, x_test),
+    )
+    encoded_images = encoder.predict(x_train)
+    decoded_images = decoder.predict(encoded_images)
+    decoded_images_orig = np.reshape(decoded_images, (-1, 30, 73))
 
+    num_images_to_show = min(5, x_train.shape[0])
+    for im_ind in range(num_images_to_show):
+        plot_ind = im_ind * 2 + 1
+        rand_ind = np.random.randint(low=0, high=x_train.shape[0])
+        plt.subplot(num_images_to_show, 2, plot_ind)
+        plt.imshow(x_train[rand_ind].reshape((30, 73)), cmap="RdBu")
+        plt.colorbar()
+        plt.subplot(num_images_to_show, 2, plot_ind + 1)
+        plt.imshow(decoded_images_orig[rand_ind], cmap="RdBu")
+        plt.colorbar()
 
-folder_path = 'E:/Research/Data/WSO/field'
-ae,encoder,decoder=get_autoencoder()
-# x_train,y_train,x_test,y_test=get_mnist_data()
-x_train,y_train,x_test,y_test=get_map_data(folder_path)
-# Training AE
-ae.fit(x_train, x_train, epochs=500, batch_size=128, shuffle=True, validation_data=(x_test, x_test))
-encoded_images = encoder.predict(x_train)
-decoded_images = decoder.predict(encoded_images)
- 
-# decoded_images_orig = np.reshape(decoded_images, newshape=(decoded_images.shape[0], 28, 28))
-decoded_images_orig = np.reshape(decoded_images, newshape=(decoded_images.shape[0], 30, 73))
-num_images_to_show = 5
-for im_ind in range(num_images_to_show):
-    plot_ind = im_ind*2 + 1
-    rand_ind = np.random.randint(low=0, high=x_train.shape[0])
-    plt.subplot(num_images_to_show, 2, plot_ind)
-    plt.imshow(x_train[rand_ind].reshape((30, 73)), cmap='RdBu')
-    # plt.imshow(x_train[rand_ind].reshape((28, 28)), cmap='gray')
+    plt.figure()
+    plt.scatter(encoded_images[:, 0], encoded_images[:, 1], c=y_train)
     plt.colorbar()
-    plt.subplot(num_images_to_show, 2, plot_ind+1)
-    plt.imshow(decoded_images_orig[rand_ind, :, :], cmap='RdBu')
-    # plt.imshow(decoded_images_orig[rand_ind, :, :], cmap='gray')
-    plt.colorbar()
-#清空绘图缓存
-plt.figure()
-plt.scatter(encoded_images[:, 0], encoded_images[:, 1], c=y_train)
-plt.colorbar()
-plt.show()
+    plt.show()
 
-db
+
+if __name__ == "__main__":
+    main()

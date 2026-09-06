@@ -1,4 +1,5 @@
 clear; close all;
+cfg = project_config();
 save_or_not = 0;
 %% Component: colorbar red-white-blue
 color_red   = [1,0,0];
@@ -15,7 +16,6 @@ red_white_blue = [R_comp',G_comp',B_comp'];
 
 %% Method 1: Use NOAA numbered Active Region
 % %% PART 1: Import data
-% data = importdata('E:\Research\Data\NOAA\SRS_adequate_info.csv');
 % % data profile: CR; No.; lat; lon_obs; lon; lat_ext; lon_ext
 % data = data(data(:,1)~=0,:);
 % %% PART 1
@@ -71,7 +71,6 @@ red_white_blue = [R_comp',G_comp',B_comp'];
 %     clim = max(max(abs(Br)));
 %     set(gca,'Clim',[-clim,clim],'TickDir','out','XminorTick','on','YminorTick','on','LineWidth',LineWidth,'FontSize',FontSize);
 %     % save figure
-%     save_dir = 'E:\Research\Work\magnetic_multipole\AR_location\';
 %     save_name = ['CR',num2str(cr_sub)];
 %     if save_or_not == 1
 %         saveas(gca,[save_dir,save_name,'.png']);
@@ -84,7 +83,7 @@ red_white_blue = [R_comp',G_comp',B_comp'];
 %% Method 2: Select Active Region manually
 %% Part 1: Import data
 % import WSO field data
-WSO_dir = 'E:\Research\Data\WSO\field\';
+WSO_dir = [cfg.paths.wso_field, filesep];
 cr = 1904;%1970
 WSO_name = ['cr',num2str(cr),'.dat'];
 WSO_file = [WSO_dir,WSO_name];
@@ -95,7 +94,7 @@ lat_dir = [WSO_dir,'lat_arr.dat'];
 lat_WSO = importdata(lat_dir); % [deg.]
 [lonn,latt] = meshgrid(lon_WSO,lat_WSO);
 % import WSO harmonic coefficients data
-hc_dir = 'E:\Research\Data\WSO\';
+hc_dir = [cfg.paths.wso_root, filesep];
 hc_file = 'gather_harmonic_coefficient.mat';
 hc_save = load([hc_dir,hc_file]);
 hc_data =  hc_save.save_var;
@@ -207,7 +206,7 @@ function data_select = select_nearest(data_subb)
 end
 
 function [lon,lat,Br] = construct_field(cr)
-    WSO_dir = 'E:\Research\Data\WSO\field\';
+WSO_dir = [cfg.paths.wso_field, filesep];
     file_name = ['cr',num2str(cr),'.dat'];
     file_dir = [WSO_dir,file_name];
     Br = importdata(file_dir); % [uT]
@@ -219,7 +218,7 @@ end
 
 function [lon,lat,field_contrib] = get_harmonics_contribution(cr,l,m)
     % import data
-    store_dir = ('E:\Research\Data\WSO\harmonics\');
+store_dir = [cfg.paths.wso_harmonics, filesep];
     file_name = ['cr',num2str(cr),'.dat'];
     data_dir = [store_dir,file_name];
     data = load(data_dir);

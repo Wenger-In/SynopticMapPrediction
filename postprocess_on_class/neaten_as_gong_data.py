@@ -4,11 +4,13 @@ import scipy.io as scio
 from astropy.io import fits
 from scipy.stats import skew, kurtosis
 
-path = 'E:/Research/Program/SynopticMapPrediction/postprocess_on_class/'
+from smp.config import load_config
+
+config = load_config()
 
 for cr in range(2239,2240):
     # raw GONG fits: flipud to get synoptic maps
-    raw_file = 'E:/Research/Program/SynopticMapPrediction/determine_order/' + 'mrzqs_c'+ str(cr) + '.fits'
+    raw_file = config.repository_root / "determine_order" / f"mrzqs_c{cr}.fits"
     # raw_file = path + 'raw/' + 'mrzqs_c2277.fits'
     # raw_file = path + 'neaten/format_as_gong/' + 'mrzql231120t0104c2277_000.fits'
     raw_fits = fits.open(raw_file)
@@ -25,7 +27,7 @@ for cr in range(2239,2240):
     plt.close()
 
     # predicted WSO mat: flipud to get synoptic maps
-    pred_file = 'E:/Research/Program/SynopticMapPrediction/determine_order/' + str(cr) + '_WSO_9_interp.mat'
+    pred_file = config.repository_root / "determine_order" / f"{cr}_WSO_9_interp.mat"
     pred_mat = scio.loadmat(pred_file)
     pred_Br = pred_mat['pred_Br_interp']
 
@@ -73,7 +75,7 @@ for cr in range(2239,2240):
     # neaten_fits[0].header['FILELIST'] = 'mrzql240529t2316c2284_000'
     
     # save .fits
-    save_file = 'E:/Research/Program/SynopticMapPrediction/determine_order/' + str(cr) + '_WSO_9.fits'
+    save_file = config.repository_root / "determine_order" / f"{cr}_WSO_9.fits"
     # save_file = path + 'neaten/' + 'cr' + str(cr) + '_neaten.fits'
     # save_file = path + 'neaten/' + neaten_fits[0].header['FILELIST'] + '.fits'
     # neaten_fits.writeto(save_file,overwrite=True)

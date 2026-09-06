@@ -1,0 +1,29 @@
+{
+  "data_root": "data",
+  "output_root": "outputs",
+  "random_seed": 456,
+  "carrington_rotation_days": 27.2753,
+  "tropical_year_days": 365.2422,
+  "paths": {
+    "wso_root": "data/WSO",
+    "wso_field": "data/WSO/field",
+    "wso_harmonics": "data/WSO/harmonics",
+    "wso_download_dat": "data/WSO/download/dat",
+    "wso_download_txt": "data/WSO/download/txt",
+    "harmonic_coefficients": "data/WSO/gather_harmonic_coefficient.mat",
+    "gong_fits": "data/GONG/fits",
+    "gong_mrzqs_fits": "data/GONG/mrzqs/fits",
+    "gong_harmonics": "data/GONG/harmonics",
+    "sunspot_root": "data/Sunspot",
+    "sunspot": "data/Sunspot/sn.mat",
+    "sunspot_smoothed": "data/Sunspot/sn_sm.mat",
+    "sunspot_interpolated": "data/Sunspot/sn_interp.mat",
+    "omni_27day": "data/OMNI/omni_27_av.dat",
+    "transformer_train": "data/transformer/2002_2004_5min_data.csv",
+    "transformer_validation": "data/transformer/2005_data_5min_4day.csv",
+    "model_output": "outputs/model_output",
+    "sunspot_output": "outputs/sunspot",
+    "synoptic_map_output": "outputs/synoptic_maps",
+    "cwt_output": "outputs/cwt"
+  }
+}

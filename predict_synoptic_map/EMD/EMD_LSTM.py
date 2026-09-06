@@ -12,7 +12,12 @@ import csv
 import random
 import time
 
+from smp.config import load_config
+from smp.constants import EMD_LSTM_RANDOM_SEED
+from smp.utils import set_random_seed
+
 save_or_not = 0
+config = load_config()
 # lm = 1 # g30(9), g31(10), g3-3(15), g41(17), g5-2(29), g53(30), g5-3(31)
 look_back_mat = [60, 126, 50, 50,\
                  25, 97, 150, 120, \
@@ -60,8 +65,7 @@ for lm in range(1,2):
         return smoothed
 
     # 导入数据
-    file_dir = 'E:/Research/Data/WSO/gather_harmonic_coefficient.mat'
-    # file_dir = 'E:/Research/Data/Sunspot/sn_interp.mat'
+    file_dir = config.path("harmonic_coefficients")
     data_str = scio.loadmat(file_dir)
     # data_mat = data_str['sn']
     data_mat = data_str['save_var']
@@ -148,13 +152,8 @@ for lm in range(1,2):
     for i, IMF in enumerate(IMFs):
         if i<4:
             # 固定随机种子
-            seed = 789
-            torch.manual_seed(seed)
-            torch.cuda.manual_seed(seed)
-            np.random.seed(seed)
-            random.seed(seed)
-            torch.backends.cudnn.deterministic = True
-            torch.backends.cudnn.benchmark = False
+            seed = EMD_LSTM_RANDOM_SEED
+            set_random_seed(seed)
             
             IMF = pd.DataFrame(IMF)
             scaler = MinMaxScaler(feature_range=(0, 1))
@@ -311,7 +310,6 @@ for lm in range(1,2):
             plt.plot(future_t+len(data0_t)+cr_base,future_predict, label='future predict',color='r')
             
             if save_or_not == 1:
-                # save_dir = 'E:/Research/Work/magnetic_multipole/predict_SC24/model_output/' 
                 # np.savetxt(save_dir+str(i)+'_imf.csv',IMFs[i],delimiter=',')
                 # np.savetxt(save_dir+str(i)+'_train.csv',train_predict,delimiter=',')
                 # np.savetxt(save_dir+str(i)+'_val.csv',val_predict[-val_size:],delimiter=',')
@@ -350,17 +348,15 @@ for lm in range(1,2):
 
     # 保存预测序列
     if save_or_not == 1:
-        save_dir = 'E:/Research/Work/magnetic_multipole/predict_SC24/model_output/'        
+        save_dir = config.ensure_output("model_output")
         save_file = 'No_' + str(lm) + '.csv'
-        np.savetxt(save_dir+save_file, data_model[max(look_back_lst):],delimiter=',')
+        np.savetxt(save_dir / save_file, data_model[max(look_back_lst):], delimiter=',')
         
         save_file = 'g_' + str(int(l_cor)) + '_' + str(int(m_cor)) + '.csv'
-        np.savetxt(save_dir+save_file, data_model[-future_step:],delimiter=',')
+        np.savetxt(save_dir / save_file, data_model[-future_step:], delimiter=',')
         
         save_png = 'g_' + str(int(l_cor)) + '_' + str(int(m_cor)) + '.png'
-        plt.savefig(save_dir+save_png)
+        plt.savefig(save_dir / save_png)
             
     # plt.show()
     plt.close()
-
-db = 1

@@ -1,8 +1,9 @@
 clear; close all;
+cfg = project_config();
 save_or_not = 0;
 %% work dir
-GONG_dir = 'E:\Research\Data\GONG\fits\';
-save_dir = 'E:\Research\Work\magnetic_multipole\GONG_map\';
+GONG_dir = [cfg.paths.gong_fits, filesep];
+save_dir = [fullfile(cfg.output_root, 'GONG_map'), filesep];
 cr_beg = 2049;
 cr_end = 2049;
 for i_cr = cr_beg : cr_end

@@ -1,10 +1,11 @@
 clear; close all;
+cfg = project_config();
 save_or_not = 1;
 cr_beg = 2259;
 cr_end = 2271;
 for i_cr = cr_beg : cr_end
     %% STEP 1: import from original format
-    store_dir = ('E:\Research\Data\WSO\download\dat\');
+    store_dir = [cfg.paths.wso_download_dat, filesep];
     file_name = ['CR',num2str(i_cr),'.dat'];
     data_dir = [store_dir,file_name];
     data_cell = textread(data_dir,'%s','delimiter','\n');
@@ -47,7 +48,7 @@ for i_cr = cr_beg : cr_end
     end
     %% save data
     data = [l_lst,m_lst,coef];
-    save_dir = ('E:\Research\Data\WSO\harmonics\');
+    save_dir = [cfg.paths.wso_harmonics, filesep];
     save_file = [save_dir,'cr',num2str(i_cr),'.dat'];
     if save_or_not == 1
         save(save_file,'data','-ascii');

@@ -10,8 +10,12 @@ from keras import optimizers
 import time
 import scipy.io as scio
 
-seed = 456
-np.random.seed(seed)
+from smp.config import load_config
+from smp.utils import set_random_seed
+
+config = load_config()
+seed = config.random_seed
+set_random_seed(seed)
 
 def creat_dataset(dataset, look_back=1):
     dataX, dataY = [], []
@@ -21,7 +25,7 @@ def creat_dataset(dataset, look_back=1):
         dataY.append(dataset[i+look_back])
     return np.array(dataX), np.array(dataY)
 
-file_dir = 'E:/Research/Data/WSO/gather_harmonic_coefficient.mat'
+file_dir = config.path("harmonic_coefficients")
 data_str = scio.loadmat(file_dir)
 data_mat = data_str['save_var'] # size: 619,100
 data = np.zeros((617,1))

@@ -6,10 +6,11 @@ from sklearn.utils import shuffle
 from tqdm import tqdm
 import scipy.io as scio
 
+from smp.config import load_config
+from smp.utils import set_random_seed
+
 #print(torch.__version__)
 
-# train_df = pd.read_csv(r'C:\Users\Desktop\fill the gap\2002_2004_5min_data.csv', encoding='utf8', header=None)    #读取数据集
-# valid_df = pd.read_csv(r'C:\Users\Desktop\fill the gap\2005_data_5min_4day.csv', encoding='utf8', header=None)    #读取数据集
 # #print(train_df.head(5))
 # train_df = train_df[[28, 29, 30]].copy()
 # valid_df = valid_df[[28, 29, 30]].copy()
@@ -72,8 +73,9 @@ import scipy.io as scio
 # test_data = DataLoader(dataset=valid_set, batch_size=1, shuffle=False, drop_last= True)
 
 # 读取单一时间序列的CSV文件
-file_dir = 'E:/Research/Data/Sunspot/sn.mat'
-# time_series_df = pd.read_csv('E:/Research/Data/Sunspot/sn_interp.csv')
+config = load_config()
+set_random_seed(config.random_seed)
+file_dir = config.path("sunspot")
 # time_series_values = time_series_df['values']
 time_series_df = scio.loadmat(file_dir)
 time_series_values = time_series_df['sn']
@@ -157,40 +159,17 @@ for i in tqdm(range(500)):
         train_loss = train_loss + loss.item()
 
     losses.append(train_loss / len(train_data))
-    print("Start Testing")
-    # 测试集进行测试
-    eval_loss = 0
-    net.eval()  # 可加可不加
-    for j, (edata, elabel) in enumerate(test_data):
-        # 前向传播
-        y_ = net(edata)
-        # 记录单批次一次batch的loss，测试集就不需要反向传播更新网络了
-        loss = criterion(y_, elabel)
-        # 累计单批次误差
-        print("[Valid loss, iteration {}: {}]".format(j, loss))
-        eval_loss = eval_loss + loss.item()
-
-    eval_losses.append(eval_loss / len(test_data))
-
-    if eval_losses[-1] < minimal_eval_loss:
-        minimal_eval_loss = eval_losses[-1]
-        overfitting = 0
-    else:
-        overfitting += 1
-        if overfitting >= threshold:
-            print("overfitting!")
-            break
-        else:
-            pass
+    # This dataset contains only the future input window, so it cannot provide
+    # a validation loss. Training loss is retained for backward compatibility.
 
 print('打印loss')
 print('训练loss：', losses)
 print('验证loss：', eval_losses)
 
 y_ = []
-for edata, elabel in test_data:
-    output = net(edata).detach().numpy()  # 预测
-    y_.extend(output* (val_max - val_min) + val_min)
+for (edata,) in test_data:
+    output = net(edata).detach().numpy()
+    y_.extend(output)
 
 
 result_dict = {

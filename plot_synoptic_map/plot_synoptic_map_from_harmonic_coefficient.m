@@ -1,4 +1,5 @@
 clear; close all;
+cfg = project_config();
 save_or_not = 0;
 mode = 1; % 0-GONG, 1-WSO, 2-predict
 cr_beg= 1700;
@@ -15,14 +16,13 @@ B_comp = [linspace(color_red(3),color_white(3),n1),linspace(color_white(3),color
 red_white_blue = [R_comp',G_comp',B_comp'];
 %% import data
 if mode == 0 % for GONG: 2047-2268
-    store_dir = 'E:\Research\Data\GONG\harmonics\';
+    store_dir = [cfg.paths.gong_harmonics, filesep];
 elseif mode == 1 % for WSO: 1642-2272
-    store_dir = 'E:\Research\Data\WSO\harmonics\';
+    store_dir = [cfg.paths.wso_harmonics, filesep];
 elseif mode == 2 % for predict: 2259-2408
-    store_dir = 'E:\Research\Work\magnetic_multipole\predict_SC25\harmonics\';
+    store_dir = [fullfile(cfg.output_root, 'predict_SC25', 'harmonics'), filesep];
 end
-% save_dir = 'E:\Research\Work\magnetic_multipole\std_harmonics\'; % for test
-save_dir = 'E:\Research\Work\magnetic_multipole\harmonics_map\';
+save_dir = [fullfile(cfg.output_root, 'harmonics_map'), filesep];
 for cr = cr_beg : cr_end
     close all;
     if mode == 0 % for GONG
@@ -107,7 +107,6 @@ for cr = cr_beg : cr_end
     if save_or_not == 1
         %     saveas(gca,[save_dir,'plane\',save_name,'_plane.png']); % for test
         saveas(gca,[save_dir,save_name,'.png']); % for GONG and WSO
-%         save(['E:\Research\Work\magnetic_multipole\predict\cr',num2str(cr),'_pred.mat'],'magneto')
     end
     %% plot magnetogram in sphere
     figure('color','k');

@@ -1,7 +1,8 @@
 clear; close all;
+cfg = project_config();
 
 dev = -132;
-data_dir = ['E:\Research\Work\magnetic_multipole\sunspot\smooth_prediction\', num2str(dev), '\'];
+data_dir = [fullfile(cfg.paths.sunspot_output, 'smooth_prediction', num2str(dev)), filesep];
 train = importdata([data_dir,'train_predict.csv']);
 val = importdata([data_dir,'val_predict.csv']);
 test = importdata([data_dir,'test_predict.csv']);
@@ -9,7 +10,7 @@ future = importdata([data_dir,'future_predict.csv']);
 future_llim = importdata([data_dir,'future_predict_llim.csv']);
 future_ulim = importdata([data_dir,'future_predict_ulim.csv']);
 
-sn_dir = 'E:\Research\Data\Sunspot\';
+sn_dir = [cfg.paths.sunspot_root, filesep];
 sn_info = importdata([sn_dir,'SN_ms_tot_V2.0.csv']);
 sn = sn_info(:,4);
 sn(sn==-1) = nan;

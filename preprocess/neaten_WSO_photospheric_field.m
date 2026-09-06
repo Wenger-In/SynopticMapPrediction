@@ -1,11 +1,12 @@
 clear; close all;
+cfg = project_config();
 save_or_not = 0;
 % cr_beg = 1642;
 cr_beg = 2272; %%%%% there is no data for CR2208 in WSO's web! %%%%%
 cr_end = 2287;
 for i_cr = cr_beg : cr_end
     %% STEP 1: import from original format
-    store_dir = ('E:\Research\Data\WSO\download\txt\');
+    store_dir = [cfg.paths.wso_download_txt, filesep];
     file_name = ['CR',num2str(i_cr),'.txt'];
     data_dir = [store_dir,file_name];
     data_cell = textread(data_dir,'%s','delimiter','\n');
@@ -33,7 +34,7 @@ for i_cr = cr_beg : cr_end
         Br(:,i_lon) = data_sub.';
     end
     %% STEP 2: save as readable format
-    save_dir = ('E:\Research\Data\WSO\field\');
+    save_dir = [cfg.paths.wso_field, filesep];
     save_file = [save_dir,'cr',num2str(i_cr),'.dat'];
     if save_or_not == 1
         save(save_file,'Br','-ascii');

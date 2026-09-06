@@ -1,10 +1,11 @@
 clear; close all;
+cfg = project_config();
 CR = 2097;
 file_name = ['cr',num2str(CR)];
-GONG_dir = 'E:\Research\Data\GONG\fits\';
-WSO_dir = 'E:\Research\Data\WSO\field\';
-GONG_recon_dir = 'E:\Research\Work\magnetic_multipole\harmonics_map\GONG\';
-WSO_recon_dir = 'E:\Research\Work\magnetic_multipole\harmonics_map\WSO\';
+GONG_dir = [cfg.paths.gong_fits, filesep];
+WSO_dir = [cfg.paths.wso_field, filesep];
+GONG_recon_dir = [fullfile(cfg.output_root, 'harmonics_map', 'GONG'), filesep];
+WSO_recon_dir = [fullfile(cfg.output_root, 'harmonics_map', 'WSO'), filesep];
 
 GONG_map = importdata([GONG_dir,file_name,'.mat']); % [Gs]
 WSO_map = importdata([WSO_dir,file_name,'.mat']); % [nT]

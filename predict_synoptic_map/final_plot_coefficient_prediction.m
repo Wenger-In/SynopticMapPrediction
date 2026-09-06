@@ -1,11 +1,12 @@
 clear; close all;
+cfg = project_config();
 l = 5;
 
 cr_beg_WSO = 1642; cr_end_WSO = 2258;
 cr_obs_lst = cr_beg_WSO : cr_end_WSO;
 
 % observation
-store_dir = 'E:\Research\Data\WSO\';
+store_dir = [cfg.paths.wso_root, filesep];
 file_name = 'gather_harmonic_coefficient.dat';
 data_dir = [store_dir,file_name];
 data = load(data_dir);
@@ -31,7 +32,7 @@ h_space_lst = [0.05,0.02,0.01,0.01,0.01,0.008,0.005,0.005,0.005];
 fig_num = 5;
 for i_m = 1 : m_num
     % prediction data
-    pred_dir = 'E:\Research\Work\magnetic_multipole\predict_SC25\model_output\';
+pred_dir = [fullfile(cfg.output_root, 'predict_SC25', 'model_output'), filesep];
     pred = importdata([pred_dir,'No_',num2str(col_beg+i_m-2),'.csv']);
     future_step = 150;
     cr_pred_lst = cr_end_WSO + future_step - length(pred) + 1 : cr_end_WSO + future_step;

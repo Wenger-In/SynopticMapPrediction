@@ -1,8 +1,9 @@
 clear; close all;
+cfg = project_config();
 save_or_not = 0;
 %% data path
-pred_dir = 'E:\Research\Work\magnetic_multipole\harmonics_map\WSO\';
-WSO_dir = 'E:\Research\Program\SynopticMapPrediction\determine_order\';
+pred_dir = [fullfile(cfg.output_root, 'harmonics_map', 'WSO'), filesep];
+WSO_dir = [fullfile(cfg.repo_root, 'determine_order'), filesep];
 %% interpolate
 cr_beg = 2239;
 cr_end = 2239;
@@ -18,7 +19,7 @@ for cr = cr_beg : cr_end
     WSO_Br = load([WSO_dir, WSO_path]);
     WSO_Br = WSO_Br.Br; % [G]
     % WSO grid
-    WSO_grid_dir = 'E:\Research\Data\WSO\field\';
+    WSO_grid_dir = [cfg.paths.wso_field, filesep];
     lon_dir = [WSO_grid_dir,'lon_arr.dat'];
     lon_WSO = importdata(lon_dir); % [deg.]
     lat_dir = [WSO_grid_dir,'lat_arr.dat'];
@@ -42,7 +43,7 @@ for cr = cr_beg : cr_end
     pred_Br_interp = interp2(llon_pred, llat_pred, pred_Br, llon_gong, llat_gong, 'linear');
     % save as .mat file
     if save_or_not == 1
-        save_dir = 'E:\Research\Program\SynopticMapPrediction\postprocess_on_class\';
+    save_dir = [fullfile(cfg.repo_root, 'postprocess_on_class'), filesep];
         save_name = ['cr',num2str(cr),'_interp.mat'];
         save([save_dir,save_name],'pred_Br_interp')
     end

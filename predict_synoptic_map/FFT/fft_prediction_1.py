@@ -2,9 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.io as scio
 
+from smp.config import load_config
+
 # 导入数据
-file_dir = 'E:/Research/Data/WSO/gather_harmonic_coefficient.mat'
-# file_dir = 'E:/Research/Data/Sunspot/sn_interp.mat'
+config = load_config()
+file_dir = config.path("harmonic_coefficients")
 data_str = scio.loadmat(file_dir)
 data_mat = data_str['save_var'] # size: 619,100
 data_lm = np.zeros((617,1))

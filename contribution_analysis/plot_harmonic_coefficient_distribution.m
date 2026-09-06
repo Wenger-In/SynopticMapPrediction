@@ -1,4 +1,5 @@
 clear; close all;
+cfg = project_config();
 save_or_not = 0;
 %% Component: colorbar red-white-blue
 color_red   = [1,0,0];
@@ -14,7 +15,7 @@ red_white_blue = [R_comp',G_comp',B_comp'];
 
 
 %% import data
-store_dir = 'E:\Research\Data\WSO\';
+store_dir = [cfg.paths.wso_root, filesep];
 file_name = 'gather_harmonic_coefficient.dat';
 data_dir = [store_dir,file_name];
 data = load(data_dir);
@@ -62,7 +63,7 @@ for i_cr = 1 : cr_num
     whitebg('k');
     set(gca,'Clim',[-clim,clim],'LineWidth',LineWidth,'FontSize',FontSize);
     %% save figure
-    save_dir = 'E:\Research\Work\magnetic_multipole\hc_distribution\';
+save_dir = [fullfile(cfg.output_root, 'hc_distribution'), filesep];
     save_name = ['CR',num2str(cr_sub)];
     if save_or_not == 1
         exportgraphics(gca,[save_dir,save_name,'.png'],'BackgroundColor','current')

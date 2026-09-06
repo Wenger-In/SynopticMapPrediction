@@ -1,8 +1,9 @@
 clear; close all;
+cfg = project_config();
 save_or_not = 0;
 %% work dir
-WSO_dir = 'E:\Research\Data\WSO\field\';
-save_dir = 'E:\Research\Work\magnetic_multipole\WSO_map\';
+WSO_dir = [cfg.paths.wso_field, filesep];
+save_dir = [fullfile(cfg.output_root, 'WSO_map'), filesep];
 cr_beg = 2239;
 cr_end = 2239;
 for i_cr = cr_beg : cr_end

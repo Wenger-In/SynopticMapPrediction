@@ -1,6 +1,7 @@
 clear; close all;
-obs_path = 'E:\Research\Data\WSO\harmonics\';
-pred_path = 'E:\Research\Work\magnetic_multipole\predict\harmonics\';
+cfg = project_config();
+obs_path = [cfg.paths.wso_harmonics, filesep];
+pred_path = [fullfile(cfg.output_root, 'predict', 'harmonics'), filesep];
 cr = 2259;
 
 obs_data = load([obs_path, 'cr', num2str(cr), '.dat']);

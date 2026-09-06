@@ -5,8 +5,11 @@ import pandas as pd
 import scipy.io as scio
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 
+from smp.config import load_config
+
 # 导入数据
-file_dir = 'E:/Research/Data/WSO/gather_harmonic_coefficient.mat'
+config = load_config()
+file_dir = config.path("harmonic_coefficients")
 data_str = scio.loadmat(file_dir)
 data_mat = data_str['save_var'] # size: 619,100
 data_lm = np.zeros((617,1))
